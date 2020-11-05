@@ -15,6 +15,13 @@ import ReposResults from 'src/components/ReposResults';
 import logo from 'src/assets/images/logo-github.png';
 import './styles.scss';
 
+/*
+Objectif : le message disparaît automatiquement 10 secondes après son apparition
+- programmer la disparition du message au moment où il apparaît, 10 secondes
+après (setTimeout)
+- booléen displayMessage dans le state
+*/
+
 // == Composant
 const App = () => {
   // valeur de l'input pour la recherche
@@ -24,10 +31,13 @@ const App = () => {
   const [repos, setRepos] = useState([]);
 
   // message à afficher
-  const [message, setMessage] = useState('Bienvenue !');
+  const [message, setMessage] = useState('');
 
   // indique si on est en cours de chargement (loader affiché)
   const [loading, setLoading] = useState(false);
+
+  // indique si on affiche le composant Message
+  const [displayMessage, setDisplayMessage] = useState(false);
 
   const makeSearch = () => {
     console.log('c\'est le moment de faire la recherche pour : ', search);
@@ -41,9 +51,11 @@ const App = () => {
         // setMessage planifie une mise à jour du state, la nouvelle valeur ne sera
         // accessible qu'au prochain rendu du composant
         // console.log(message); // affiche l'ancienne valeur de message
+        setDisplayMessage(true);
       })
       .catch((error) => {
         setMessage('Une erreur s\'est produite, ré-essayez dans quelques minutes');
+        setDisplayMessage(true);
       })
       .finally(() => {
         setLoading(false);
@@ -55,13 +67,17 @@ const App = () => {
 
   // console.log(message); // j'ai bien accès à la nouvelle valeur ici
 
+  const hideMessage = () => {
+    setDisplayMessage(false);
+  };
+
   return (
     <div className="app">
       <header className="header">
         <img src={logo} alt="" />
       </header>
       <SearchBar manageSubmit={makeSearch} search={search} setSearch={setSearch} />
-      <Message message={message} />
+      {displayMessage && <Message message={message} hideMessage={hideMessage} />}
       <ReposResults repos={repos} />
       {loading && (
         <Dimmer active>
