@@ -1,6 +1,7 @@
 // == Import npm
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 import 'semantic-ui-css/semantic.min.css';
 
@@ -25,6 +26,9 @@ const App = () => {
   // message à afficher
   const [message, setMessage] = useState('Bienvenue !');
 
+  // indique si on est en cours de chargement (loader affiché)
+  const [loading, setLoading] = useState(false);
+
   const makeSearch = () => {
     console.log('c\'est le moment de faire la recherche pour : ', search);
 
@@ -37,7 +41,13 @@ const App = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
+
+    // exécuté juste après la requête, sans attendre la réponse
+    setLoading(true);
   };
 
   return (
@@ -48,6 +58,11 @@ const App = () => {
       <SearchBar manageSubmit={makeSearch} search={search} setSearch={setSearch} />
       <Message message={message} />
       <ReposResults repos={repos} />
+      {loading && (
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      )}
     </div>
   );
 };
