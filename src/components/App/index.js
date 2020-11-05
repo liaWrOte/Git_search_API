@@ -1,5 +1,5 @@
 // == Import npm
-import React from 'react';
+import React, { useState } from 'react';
 
 import 'semantic-ui-css/semantic.min.css';
 
@@ -18,8 +18,11 @@ import './styles.scss';
 
 // == Composant
 const App = () => {
+  // valeur de l'input pour la recherche
+  const [search, setSearch] = useState('');
+
   const makeSearch = () => {
-    console.log('c\'est le moment de faire la recherche');
+    console.log('c\'est le moment de faire la recherche pour : xxxxx');
   };
 
   return (
@@ -27,7 +30,7 @@ const App = () => {
       <header className="header">
         <img src={logo} alt="" />
       </header>
-      <SearchBar manageSubmit={makeSearch} />
+      <SearchBar manageSubmit={makeSearch} search={search} />
       <Message />
       <ReposResults repos={reposData.items} />
     </div>
