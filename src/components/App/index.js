@@ -25,16 +25,12 @@ const App = () => {
     console.log('c\'est le moment de faire la recherche pour : ', search);
   };
 
-  const updateSearchValue = (newValue) => {
-    setSearch(newValue);
-  };
-
   return (
     <div className="app">
       <header className="header">
         <img src={logo} alt="" />
       </header>
-      <SearchBar manageSubmit={makeSearch} search={search} setSearch={updateSearchValue} />
+      <SearchBar manageSubmit={makeSearch} search={search} setSearch={setSearch} />
       <Message />
       <ReposResults repos={reposData.items} />
     </div>
