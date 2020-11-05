@@ -17,16 +17,22 @@ import logo from 'src/assets/images/logo-github.png';
 import './styles.scss';
 
 // == Composant
-const App = () => (
-  <div className="app">
-    <header className="header">
-      <img src={logo} alt="" />
-    </header>
-    <SearchBar />
-    <Message />
-    <ReposResults repos={reposData.items} />
-  </div>
-);
+const App = () => {
+  const makeSearch = () => {
+    console.log('c\'est le moment de faire la recherche');
+  };
+
+  return (
+    <div className="app">
+      <header className="header">
+        <img src={logo} alt="" />
+      </header>
+      <SearchBar manageSubmit={makeSearch} />
+      <Message />
+      <ReposResults repos={reposData.items} />
+    </div>
+  );
+};
 
 // == Export
 export default App;
