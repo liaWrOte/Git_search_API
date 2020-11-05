@@ -38,9 +38,12 @@ const App = () => {
         // console.log(response.data);
         setRepos(response.data.items);
         setMessage(`La recherche a retourné ${response.data.total_count} résultats`);
+        // setMessage planifie une mise à jour du state, la nouvelle valeur ne sera
+        // accessible qu'au prochain rendu du composant
+        // console.log(message); // affiche l'ancienne valeur de message
       })
       .catch((error) => {
-        console.log(error);
+        setMessage('Une erreur s\'est produite, ré-essayez dans quelques minutes');
       })
       .finally(() => {
         setLoading(false);
@@ -49,6 +52,8 @@ const App = () => {
     // exécuté juste après la requête, sans attendre la réponse
     setLoading(true);
   };
+
+  // console.log(message); // j'ai bien accès à la nouvelle valeur ici
 
   return (
     <div className="app">
