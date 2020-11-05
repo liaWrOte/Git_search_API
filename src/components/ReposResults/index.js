@@ -1,39 +1,23 @@
 import React from 'react';
-import { Card, Image } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Card } from 'semantic-ui-react';
 
-const ReposResults = () => (
+import Repo from './Repo';
+
+const ReposResults = ({ repos }) => (
   <Card.Group itemsPerRow={3}>
-    <Card>
-      <Image src="https://randomfox.ca/images/21.jpg" wrapped ui={false} />
-      <Card.Content>
-        <Card.Header>Nom du repo</Card.Header>
-        <Card.Meta>Auteur</Card.Meta>
-        <Card.Description>
-          Description du repo
-        </Card.Description>
-      </Card.Content>
-    </Card>
-    <Card>
-      <Image src="https://randomfox.ca/images/21.jpg" wrapped ui={false} />
-      <Card.Content>
-        <Card.Header>Nom du repo</Card.Header>
-        <Card.Meta>Auteur</Card.Meta>
-        <Card.Description>
-          Description du repo
-        </Card.Description>
-      </Card.Content>
-    </Card>
-    <Card>
-      <Image src="https://randomfox.ca/images/21.jpg" wrapped ui={false} />
-      <Card.Content>
-        <Card.Header>Nom du repo</Card.Header>
-        <Card.Meta>Auteur</Card.Meta>
-        <Card.Description>
-          Description du repo
-        </Card.Description>
-      </Card.Content>
-    </Card>
+    {repos.map((item) => (
+      <Repo key={item.id} {...item} />
+    ))}
   </Card.Group>
 );
+
+ReposResults.propTypes = {
+  repos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+  ).isRequired,
+};
 
 export default ReposResults;
