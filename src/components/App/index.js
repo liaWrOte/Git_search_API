@@ -22,7 +22,11 @@ const App = () => {
   const [search, setSearch] = useState('');
 
   const makeSearch = () => {
-    console.log('c\'est le moment de faire la recherche pour : xxxxx');
+    console.log('c\'est le moment de faire la recherche pour : ', search);
+  };
+
+  const updateSearchValue = (newValue) => {
+    setSearch(newValue);
   };
 
   return (
@@ -30,7 +34,7 @@ const App = () => {
       <header className="header">
         <img src={logo} alt="" />
       </header>
-      <SearchBar manageSubmit={makeSearch} search={search} />
+      <SearchBar manageSubmit={makeSearch} search={search} setSearch={updateSearchValue} />
       <Message />
       <ReposResults repos={reposData.items} />
     </div>
