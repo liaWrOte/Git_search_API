@@ -1,15 +1,27 @@
 // == Import npm
 import React from 'react';
 
+import 'semantic-ui-css/semantic.min.css';
+
 // == Import
-import reactLogo from './react-logo.svg';
-import './styles.css';
+import SearchBar from 'src/components/SearchBar';
+import Message from 'src/components/Message';
+import ReposResults from 'src/components/ReposResults';
+
+// si j'utilise une image qui est dans src, je l'importe pour que webpack puisse
+// gérer l'image et avoir un chemin dist/......
+import logo from 'src/assets/images/logo-github.png';
+import './styles.scss';
 
 // == Composant
 const App = () => (
   <div className="app">
-    <img src={reactLogo} alt="react logo" />
-    <h1>Composant : App</h1>
+    <header className="header">
+      <img src={logo} alt="" />
+    </header>
+    <SearchBar />
+    <Message />
+    <ReposResults />
   </div>
 );
 

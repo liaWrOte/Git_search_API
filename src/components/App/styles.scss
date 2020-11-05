@@ -1,0 +1,15 @@
+.app {
+  width: 500px;
+  margin: auto;
+  background-color: #ecf0f1;
+  padding: 1rem;
+  min-height: 100vh;
+
+  .header {
+    text-align: center;
+  }
+}
+
+.app img {
+  max-width: 150px;
+}
