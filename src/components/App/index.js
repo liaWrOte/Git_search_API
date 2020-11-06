@@ -9,6 +9,7 @@ import 'semantic-ui-css/semantic.min.css';
 import SearchBar from 'src/components/SearchBar';
 import Message from 'src/components/Message';
 import ReposResults from 'src/components/ReposResults';
+import MoreResults from 'src/components/MoreResults';
 
 // si j'utilise une image qui est dans src, je l'importe pour que webpack puisse
 // gérer l'image et avoir un chemin dist/......
@@ -39,11 +40,15 @@ const App = () => {
   // indique si on affiche le composant Message
   const [displayMessage, setDisplayMessage] = useState(false);
 
+  // nombre total de résultats
+  const [total, setTotal] = useState(0);
+
   const makeSearch = () => {
     console.log('c\'est le moment de faire la recherche pour : ', search);
 
-    // on fait appel à l'API
-    axios.get(`https://api.github.com/search/repositories?q=${search}`)
+    // on envoie une requête vers https://api.github.com/search/repositories?q=TEXTE
+    // (ajout de paramètres pour gérer la pagination des résultats)
+    axios.get(`https://api.github.com/search/repositories?q=${search}&sort=stars&order=desc&page=1&per_page=9`)
       .then((response) => {
         // console.log(response.data);
         setRepos(response.data.items);
@@ -52,6 +57,9 @@ const App = () => {
         // accessible qu'au prochain rendu du composant
         // console.log(message); // affiche l'ancienne valeur de message
         setDisplayMessage(true);
+
+        // on enregistre le nombre total de résultats
+        setTotal(response.data.total_count);
       })
       .catch((error) => {
         setMessage('Une erreur s\'est produite, ré-essayez dans quelques minutes');
@@ -71,6 +79,32 @@ const App = () => {
     setDisplayMessage(false);
   };
 
+  const fetchMoreResults = () => {
+    // affichage du loader pendant le chargement des résultats supplémentaires =>
+    // ici pour améliorer l'ergonomie on pourrait avoir plutôt un loader sur le bouton,
+    // mais plus difficile à gérer, il faudrait encore ajouter une nouvelle
+    // information au state
+    // Note : on a ajouté une prop "page" au composant Dimmer pour que le layer gris
+    // recouvre bien toute la page
+    setLoading(true);
+
+    axios.get(`https://api.github.com/search/repositories?q=${search}&sort=stars&order=desc&page=${(repos.length / 9) + 1}&per_page=9`)
+      .then((response) => {
+        setRepos([
+          ...repos,
+          // utilisation de spread operator pour "aplatir" le tableau (récupérer les
+          // éléments), sinon on intègrerait un tableau dans le tableau
+          ...response.data.items,
+        ]);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -80,9 +114,14 @@ const App = () => {
       {displayMessage && <Message message={message} hideMessage={hideMessage} />}
       <ReposResults repos={repos} />
       {loading && (
-        <Dimmer active>
+        <Dimmer active page>
           <Loader />
         </Dimmer>
+      )}
+      {repos.length !== total && (
+        <MoreResults
+          fetchMore={fetchMoreResults}
+        />
       )}
     </div>
   );
