@@ -2,18 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Image } from 'semantic-ui-react';
 
-/*
-Pour mettre du style inline
-<Composant style={objet} />
-On fournit un objet en Javascript qui décrit les attributs CSS à appliquer,
-<Composant style={{ display: 'block' }} />
-Si tiret dans la propriété CSS je l'écris en camelCase,
-overflow-wrap => overflowWrap
-*/
-
-const Repo = ({ name, owner, description }) => (
-  <Card>
-    <Image src={owner.avatar_url} wrapped ui={false} />
+const Repo = ({
+  name, owner, description, html_url,
+}) => (
+  <Card color="yellow" href={html_url} target="_blank">
+    <Image src={owner.avatar_url} wrapped ui />
     <Card.Content>
       <Card.Header style={{ overflowWrap: 'break-word' }}>{name}</Card.Header>
       <Card.Meta>{owner.login}</Card.Meta>
@@ -31,8 +24,6 @@ Repo.propTypes = {
   description: PropTypes.string,
 };
 
-// si une prop n'est pas obligatoire, il faut indiquer quelle est sa valeur par défaut
-// cette valeur sera utilisée si aucune valeur n'est fournie pour la prop
 Repo.defaultProps = {
   description: '',
 };
